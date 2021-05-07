@@ -2,6 +2,7 @@ package ku.product.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,6 +26,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                .mvcMatchers(HttpMethod.GET, "/api/products")
+                .hasAuthority("SCOPE_read:products")
+                .mvcMatchers(HttpMethod.POST, "/api/products")
+                .hasAuthority("SCOPE_create:products")
                 .antMatchers("/api/products").permitAll()
                 .anyRequest()
                 .authenticated()
